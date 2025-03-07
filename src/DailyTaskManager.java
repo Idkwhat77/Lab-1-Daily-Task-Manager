@@ -1,44 +1,47 @@
 import java.util.Scanner;
+import java.util.Stack;
+import java.util.LinkedList; // Better than manually using LinkedList methods :/
 
 public class DailyTaskManager {
-    public static void main(String[] args) throws Exception {
 
 /*-------------------------------------------------------------------------------------------------------------------------------------*/
 
-        // ==================== Universal Variable Defining Area :O ==================== //
+    // ==================== Universal Variable Area :O ==================== //
 
-        String[] Tasks = {"Eat", "Sleep", "Play", "Sleep2", "Rest"};
-        String Update_Task = "Placeholder";
+    static String reset = "\u001b[0m", red = "\u001b[31m", blue = "\u001b[34m", purple = "\u001b[35m";
+    static String cyan = "\u001b[36m", white = "\u001b[37m", yellow = "\u001b[33m", green = "\u001b[32m";
+    static String white_bold = "\u001b[37;1m", yellow_bold = "\u001b[33;1m", cyan_bold = "\u001b[36;1m";
 
-        int Menu_Choice;
-        int Update_Index = 0;
-        int User_Choice;
+    String[] Tasks = {"Eat", "Sleep", "Play", "Sleep part 2", "Sleep part 3"};
+    Stack<String> Tasks_Status = new Stack<>();
+    LinkedList<String> Tasks_LL = new LinkedList<>();
 
-        boolean Run = true;
-        Scanner scanner = new Scanner(System.in);
+    int Update_Index = 0;
+    int User_Choice;
+    Scanner scanner = new Scanner(System.in);
 
 /*-------------------------------------------------------------------------------------------------------------------------------------*/
 
-        // ==================== Main Program Area :))) ==================== //
-
-        System.out.print("\033[H\033[2J"); // Clears the console
-
-        while (Run == true) {
-            System.out.print("""
+    public int Main_Menu() {
+        System.out.print("""
 ==============================
 Which menu do you want to see?
+(0 to exit)
 1. Array
 2. Linked List
 ============================== 
 Please enter :  """);
-            Menu_Choice = scanner.nextInt();
-            if (Menu_Choice == 1) {
-                System.out.println("""
+        return scanner.nextInt();
+    }
+
+    public void Array_Menu() {
+        while (true) {
+        System.out.println("""
 ================================
 What would you like to do today?
-1. Check all tasks
+1. Check task status
 2. Update a task
-3. Add a task
+3. Change task status
 4. Back
 ================================
                         """);
@@ -46,33 +49,82 @@ What would you like to do today?
                 User_Choice = scanner.nextInt();
                 switch (User_Choice) {
                     case 1:
-                        System.out.print("\033[H\033[2J");
-                        for (int i = 0; i < Tasks.length; i++) {
-                            System.out.println((i+1) + ". " + Tasks[i]);
-                        }
-                        break;
+                    System.out.print("\033[H\033[2J");
+                    for (int Update_Index = 0; Update_Index < Tasks.length; Update_Index++) {
+                        System.out.print((Update_Index+1) + ". " + Tasks[Update_Index]);
                         
+                        if (Tasks_Status.contains(Tasks[Update_Index])) {
+                            System.out.print(green + " (Finished)\n" + reset);
+                        }
+
+                        else {
+                            System.out.print(red + " (Unfinished)\n" + reset);
+
+                        }
+                    }
+                    break;
+                                       
                     case 2:
                         System.out.print("Which task would you like to update? (Type the index) : ");
-                        Update_Index = scanner.nextInt() + 1;
+                        Update_Index = scanner.nextInt() - 1;
                         System.out.print("Update with what task : ");
                         scanner.nextLine();
-                        Update_Task = scanner.nextLine();
+                        String Update_Task = scanner.nextLine();
                         Tasks[Update_Index] = Update_Task;
                         System.out.print("\033[H\033[2J");
                         System.out.println("Succesfully updated!");
                         break;
 
                     case 3:
-                        
+                        while (true) {
+                            System.out.print("Which task would you like to mark as complete? (Type 0 to exit, 9 to undo): ");
+                            Update_Index = scanner.nextInt() - 1;
+                            System.out.print("\033[H\033[2J");
+
+                            if (Update_Index == -1) {
+                                break;
+                            
+                            } else if (Update_Index == 8) {
+                                if (Tasks_Status.isEmpty()) {
+                                    System.out.println("No completed tasks found...");
+                                } else {
+                                    Tasks_Status.pop();
+                                    System.out.println("Task has been untasked!");
+                                }
+
+                            } else if (Tasks_Status.contains(Tasks[Update_Index])){
+                                System.out.println("Task already completed!");
+
+                            }
+
+                            else {
+                                Tasks_Status.push(Tasks[Update_Index]);
+                                System.out.println("Succesfully updated!");
+                            }
+                        }
                         break;
 
                     case 4:
-                        break;
+                        scanner.nextLine();
+                        System.out.print("\033[H\033[2J");
+                        return;
                         
                     default:
+                    
                         System.out.println("Invalid choice");
                 }
+            }
+        }
+    
+
+    public static void main(String[] args) throws Exception {
+
+        DailyTaskManager TaskManager = new DailyTaskManager();
+        while (true) {
+            int Menu_Choice = TaskManager.Main_Menu();
+            if (Menu_Choice == 1) {
+                System.out.print("\033[H\033[2J");
+                TaskManager.Array_Menu();
             }
         }
     }
