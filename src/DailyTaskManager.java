@@ -16,21 +16,15 @@ public class DailyTaskManager {
     Stack<String> Tasks_Status = new Stack<>();
     LinkedList<String> Tasks_LL = new LinkedList<>();
 
-    int Update_Index = 0;
-    int User_Choice;
-    Scanner scanner = new Scanner(System.in);
+    static Scanner scanner = new Scanner(System.in);
 
 /*-------------------------------------------------------------------------------------------------------------------------------------*/
 
-    public int Main_Menu() {
-        System.out.print("""
-==============================
-Which menu do you want to see?
-(0 to exit)
-1. Array
-2. Linked List
-============================== 
-Please enter :  """);
+    public static int Check_Int() {
+        while (!scanner.hasNextInt()) { 
+            System.out.println(red + "Invalid input! Please enter a number!" + reset);
+            scanner.next(); 
+        }
         return scanner.nextInt();
     }
 
@@ -46,7 +40,7 @@ What would you like to do today?
 ================================
                         """);
                 System.out.print("Enter your choice: ");
-                User_Choice = scanner.nextInt();
+                int User_Choice = Check_Int();
                 switch (User_Choice) {
                     case 1:
                     System.out.print("\033[H\033[2J");
@@ -66,41 +60,56 @@ What would you like to do today?
                     break;
                                        
                     case 2:
-                        System.out.print("Which task would you like to update? (Type the index) : ");
-                        Update_Index = scanner.nextInt() - 1;
-                        System.out.print("Update with what task : ");
-                        scanner.nextLine();
-                        String Update_Task = scanner.nextLine();
-                        Tasks[Update_Index] = Update_Task;
-                        System.out.print("\033[H\033[2J");
-                        System.out.println("Succesfully updated!");
+                        while (true) {
+                            System.out.print("Which task would you like to update? (Type the index) : ");
+                            int Update_Index = Check_Int();
+                            if (Tasks.length < Update_Index) {
+                                System.out.println("hell no");
+
+                            } else {
+                                Update_Index = Update_Index - 1;
+                                System.out.print("Update with what task : ");
+                                scanner.nextLine();
+                                String Update_Task = scanner.nextLine();
+                                Tasks[Update_Index] = Update_Task;
+                                System.out.print("\033[H\033[2J");
+                                System.out.println("Succesfully updated!");
+                                break;
+                            }
+                        }
                         break;
 
                     case 3:
                         while (true) {
                             System.out.print("Which task would you like to mark as complete? (Type 0 to exit, 9 to undo): ");
-                            Update_Index = scanner.nextInt() - 1;
-                            System.out.print("\033[H\033[2J");
+                            int Update_Index = Check_Int();
+                            if (Tasks.length < Update_Index && Update_Index != 9 ) {
+                                System.out.println("hell no");
 
-                            if (Update_Index == -1) {
-                                break;
-                            
-                            } else if (Update_Index == 8) {
-                                if (Tasks_Status.isEmpty()) {
-                                    System.out.println("No completed tasks found...");
-                                } else {
-                                    Tasks_Status.pop();
-                                    System.out.println("Task has been untasked!");
+                            } else {
+                                Update_Index = Update_Index - 1;
+                                System.out.print("\033[H\033[2J");
+
+                                if (Update_Index == -1) {
+                                    break;
+                                
+                                } else if (Update_Index == 8) {
+                                    if (Tasks_Status.isEmpty()) {
+                                        System.out.println("No completed tasks found...");
+                                    } else {
+                                        Tasks_Status.pop();
+                                        System.out.println("Task has been untasked!");
+                                    }
+
+                                } else if (Tasks_Status.contains(Tasks[Update_Index])){
+                                    System.out.println("Task already completed!");
+
                                 }
 
-                            } else if (Tasks_Status.contains(Tasks[Update_Index])){
-                                System.out.println("Task already completed!");
-
-                            }
-
-                            else {
-                                Tasks_Status.push(Tasks[Update_Index]);
-                                System.out.println("Succesfully updated!");
+                                else {
+                                    Tasks_Status.push(Tasks[Update_Index]);
+                                    System.out.println("Succesfully updated!");
+                                }
                             }
                         }
                         break;
@@ -129,7 +138,7 @@ What would you like to do today?
 ================================
                         """);
                 System.out.print("Enter your choice: ");
-                User_Choice = scanner.nextInt();
+                int User_Choice = Check_Int();
                 switch (User_Choice) {
                     case 1:
                     System.out.print("\033[H\033[2J");
@@ -154,7 +163,8 @@ What would you like to do today?
 
                     case 3:
                         System.out.println("Type task number to remove : ");
-                        Update_Index = scanner.nextInt() - 1;
+                        int Update_Index = Check_Int();
+                        Update_Index = Update_Index - 1;
 
                         if (Tasks_LL.isEmpty()) {
                             System.out.print("\033[H\033[2J");
@@ -184,7 +194,15 @@ What would you like to do today?
 
         DailyTaskManager TaskManager = new DailyTaskManager();
         while (true) {
-            int Menu_Choice = TaskManager.Main_Menu();
+            System.out.print("""
+==============================
+Which menu do you want to see?
+(0 to exit)
+1. Array
+2. Linked List
+============================== 
+Please enter :  """);
+            int Menu_Choice = Check_Int();
             if (Menu_Choice == 1) {
                 System.out.print("\033[H\033[2J");
                 TaskManager.Array_Menu();
