@@ -50,7 +50,8 @@ What would you like to do today?
                 switch (User_Choice) {
                     case 1:
                     System.out.print("\033[H\033[2J");
-                    for (int Update_Index = 0; Update_Index < Tasks.length; Update_Index++) {
+
+                    for (int Update_Index = 0; Update_Index < Tasks.length; Update_Index++) { // Rather reuse another object than making a new one
                         System.out.print((Update_Index+1) + ". " + Tasks[Update_Index]);
                         
                         if (Tasks_Status.contains(Tasks[Update_Index])) {
@@ -116,6 +117,68 @@ What would you like to do today?
             }
         }
     
+public void LinkedList_Menu() {
+        while (true) {
+        System.out.println("""
+================================
+What would you like to do today?
+1. Check tasks
+2. Add a task
+3. Remove a task
+4. Back
+================================
+                        """);
+                System.out.print("Enter your choice: ");
+                User_Choice = scanner.nextInt();
+                switch (User_Choice) {
+                    case 1:
+                    System.out.print("\033[H\033[2J");
+                    if (Tasks_LL.isEmpty()) {
+                        System.out.println("List is empty lmao");
+                    } 
+                    else {
+                        for (String tasks : Tasks_LL) {
+                            System.out.println("-" + tasks);
+                        }
+                    }
+                    break;
+                                       
+                    case 2:
+                        System.out.print("Type task to add : ");
+                        scanner.nextLine();
+                        String Update_Task = scanner.nextLine();
+                        Tasks_LL.add(Update_Task);
+                        System.out.print("\033[H\033[2J");
+                        System.out.println("Succesfully updated!");
+                        break;
+
+                    case 3:
+                        System.out.println("Type task number to remove : ");
+                        Update_Index = scanner.nextInt() - 1;
+
+                        if (Tasks_LL.isEmpty()) {
+                            System.out.print("\033[H\033[2J");
+                            System.out.println("No");
+                        } else {
+                            Tasks_LL.remove(Update_Index);
+                            System.out.print("\033[H\033[2J");
+                            System.out.println("Yay");
+
+                        }
+
+                        break;
+
+                    case 4:
+                        scanner.nextLine();
+                        System.out.print("\033[H\033[2J");
+                        return;
+                        
+                    default:
+                    
+                        System.out.println("Invalid choice");
+                }
+            }
+        }
 
     public static void main(String[] args) throws Exception {
 
@@ -125,6 +188,9 @@ What would you like to do today?
             if (Menu_Choice == 1) {
                 System.out.print("\033[H\033[2J");
                 TaskManager.Array_Menu();
+            } else if (Menu_Choice == 2) {
+                System.out.print("\033[H\033[2J");
+                TaskManager.LinkedList_Menu();
             }
         }
     }
