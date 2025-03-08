@@ -12,9 +12,10 @@ public class DailyTaskManager {
     static String cyan = "\u001b[36m", white = "\u001b[37m", yellow = "\u001b[33m", green = "\u001b[32m";
     static String white_bold = "\u001b[37;1m", yellow_bold = "\u001b[33;1m", cyan_bold = "\u001b[36;1m";
 
-    String[] Tasks = {"Eat", "Sleep", "Play", "Sleep part 2", "Sleep part 3"};
-    Stack<String> Tasks_Status = new Stack<>();
+    String[] Tasks_Arr = {"Eat", "Sleep", "Play", "Sleep part 2", "Sleep part 3"};
+    Stack<String> Tasks_Array_Status = new Stack<>();
     LinkedList<String> Tasks_LL = new LinkedList<>();
+    Stack<String> Tasks_LL_Status = new Stack<>();
 
     static Scanner scanner = new Scanner(System.in);
 
@@ -45,10 +46,10 @@ What would you like to do today?
                     case 1:
                     System.out.print("\033[H\033[2J");
 
-                    for (int Update_Index = 0; Update_Index < Tasks.length; Update_Index++) { // Rather reuse another object than making a new one
-                        System.out.print((Update_Index+1) + ". " + Tasks[Update_Index]);
+                    for (int Update_Index = 0; Update_Index < Tasks_Arr.length; Update_Index++) { // Rather reuse another object than making a new one
+                        System.out.print((Update_Index+1) + ". " + Tasks_Arr[Update_Index]);
                         
-                        if (Tasks_Status.contains(Tasks[Update_Index])) {
+                        if (Tasks_Array_Status.contains(Tasks_Arr[Update_Index])) {
                             System.out.print(green + " (Finished)\n" + reset);
                         }
 
@@ -63,7 +64,7 @@ What would you like to do today?
                         while (true) {
                             System.out.print("Which task would you like to update? (Type the index) : ");
                             int Update_Index = Check_Int();
-                            if (Tasks.length < Update_Index) {
+                            if (Tasks_Arr.length < Update_Index) {
                                 System.out.println("hell no");
 
                             } else {
@@ -71,7 +72,7 @@ What would you like to do today?
                                 System.out.print("Update with what task : ");
                                 scanner.nextLine();
                                 String Update_Task = scanner.nextLine();
-                                Tasks[Update_Index] = Update_Task;
+                                Tasks_Arr[Update_Index] = Update_Task;
                                 System.out.print("\033[H\033[2J");
                                 System.out.println("Succesfully updated!");
                                 break;
@@ -83,7 +84,7 @@ What would you like to do today?
                         while (true) {
                             System.out.print("Which task would you like to mark as complete? (Type 0 to exit, 9 to undo): ");
                             int Update_Index = Check_Int();
-                            if (Tasks.length < Update_Index && Update_Index != 9 ) {
+                            if (Tasks_Arr.length < Update_Index && Update_Index != 9 ) {
                                 System.out.println("hell no");
 
                             } else {
@@ -94,20 +95,20 @@ What would you like to do today?
                                     break;
                                 
                                 } else if (Update_Index == 8) {
-                                    if (Tasks_Status.isEmpty()) {
+                                    if (Tasks_Array_Status.isEmpty()) {
                                         System.out.println("No completed tasks found...");
                                     } else {
-                                        Tasks_Status.pop();
+                                        Tasks_Array_Status.pop();
                                         System.out.println("Task has been untasked!");
                                     }
 
-                                } else if (Tasks_Status.contains(Tasks[Update_Index])){
+                                } else if (Tasks_Array_Status.contains(Tasks_Arr[Update_Index])){
                                     System.out.println("Task already completed!");
 
                                 }
 
                                 else {
-                                    Tasks_Status.push(Tasks[Update_Index]);
+                                    Tasks_Array_Status.push(Tasks_Arr[Update_Index]);
                                     System.out.println("Succesfully updated!");
                                 }
                             }
@@ -120,8 +121,8 @@ What would you like to do today?
                         return;
                         
                     default:
-                    
-                        System.out.println("Invalid choice");
+                        System.out.print("\033[H\033[2J");
+                        System.out.println(red + "Invalid choice" + reset);
                 }
             }
         }
@@ -134,7 +135,8 @@ What would you like to do today?
 1. Check tasks
 2. Add a task
 3. Remove a task
-4. Back
+4. Change Task Status
+5. Back
 ================================
                         """);
                 System.out.print("Enter your choice: ");
@@ -147,7 +149,13 @@ What would you like to do today?
                     } 
                     else {
                         for (String tasks : Tasks_LL) {
-                            System.out.println("-" + tasks);
+                            System.out.print("- " + tasks);
+
+                            if (!Tasks_LL_Status.contains(tasks)) {
+                                System.out.println(red + " (Unfinished)" + reset);
+                            } else {
+                                System.out.println(green + " (Finished)" + reset);
+                            }
                         }
                     }
                     break;
@@ -179,12 +187,43 @@ What would you like to do today?
                         break;
 
                     case 4:
-                        scanner.nextLine();
-                        System.out.print("\033[H\033[2J");
-                        return;
-                        
+                    while (true) {
+                        System.out.print("Which task would you like to mark as complete? (Type 0 to exit, 9 to undo): ");
+                        Update_Index = Check_Int();
+                        Update_Index = Update_Index -1;
+                        if (Update_Index > Tasks_LL.size() && Update_Index != 8 ) {
+                            System.out.println("hell no");
+
+                        } else {
+                            System.out.print("\033[H\033[2J");
+
+                            if (Update_Index == -1) {
+                                break;
+                            
+                            } else if (Update_Index == 8) {
+                                if (Tasks_LL_Status.isEmpty()) {
+                                    System.out.println("No completed tasks found...");
+                                } else {
+                                    Tasks_LL_Status.remove(Tasks_LL_Status.peek());
+                                    System.out.println("Task has been untasked!");
+                                }
+
+                            } else if (Tasks_Array_Status.contains(Tasks_LL.get(Update_Index))){
+                                System.out.println("Task already completed!");
+
+                            }
+
+                            else {
+                                Tasks_LL_Status.add(Tasks_LL.get(Update_Index));
+                                System.out.println("Succesfully updated!");
+                            }
+                        }
+                    }
+                    break;
+
+
                     default:
-                    
+                        System.out.print("\033[H\033[2J");
                         System.out.println("Invalid choice");
                 }
             }
@@ -209,6 +248,12 @@ Please enter :  """);
             } else if (Menu_Choice == 2) {
                 System.out.print("\033[H\033[2J");
                 TaskManager.LinkedList_Menu();
+            } else if (Menu_Choice == 0) {
+                System.out.print("Bye bye");
+                break;
+            } else {
+                System.out.print("\033[H\033[2J");
+                System.out.println("that aint an option bro");
             }
         }
     }
