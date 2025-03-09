@@ -16,11 +16,11 @@ This is the simplest once. Since array sizes are fixed, we can just have a pre-d
 
 **-Stacks**
 
-Stacks are where we mark a task as complete. If a task is in the stack, it is finished. This is made easier by using Java's java.util.Stack import. At first, I tried storing the task's name itself in the stack, but it quickly backfired by applying a finished status to all tasks with that name (including duplicate tasks), rather than one specific task. I changed this by storing the task's index since all indexes are unique.
+Stacks are where we mark a task as complete. If a task is in the stack, it is finished. This is made easier by using Java's java.util.Stack library. At first, I tried storing the task's name itself in the stack, but it quickly backfired by applying a finished status to all tasks with that name (including duplicate tasks), rather than one specific task. I changed this by storing the task's index since all indexes are unique.
 
 **-Linked List**
 
-Linked List wasn't all that hard either since all I did was copy the code for the methods in Arrays and change the variables a bit and added a remove feature + extra error handling.
+Linked List wasn't all that hard either since all I did was copy the code for the methods in Arrays and change the variables a bit and added a remove feature + extra error handling. This was made easier by the holy java.util.LinkedList library.
 
 ## Challenges
 
