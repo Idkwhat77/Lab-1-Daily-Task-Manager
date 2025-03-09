@@ -7,6 +7,7 @@ public class DailyTaskManager {
 
 /* Code References
  * https://stackoverflow.com/questions/10241217/how-to-clear-console-in-java
+ * https://stackoverflow.com/questions/7379915/java-how-to-call-non-static-method-from-main-method
  * https://stackoverflow.com/questions/16816250/java-inputmismatchexception
  * https://www.lihaoyi.com/post/BuildyourownCommandLinewithANSIescapecodes.html
  */
@@ -381,6 +382,7 @@ What would you like to do today?
     // ==================== Main Program Area :O ==================== //
     public static void main(String[] args) throws Exception {
 
+        // Create new object instance of the class so the code knows what object instance to change
         DailyTaskManager TaskManager = new DailyTaskManager();
         clearConsole();
         while (true) {
