@@ -13,4 +13,7 @@ Another assignment, another report. For this one, we basically have to create so
 No assignment is free of challenges and errors. Here are some I encountered:
 
 - There are so many places where an error can occure. It could be either an out of bounds index or a wrong input mismatch. I asked **ChatGPT** for improvements on the index out of bounds side and it was just comparing it by structure size and 0, which didn't occure to me since I was really worn out or sick when writing this code. Wrong input mismatch is fixed by me just recycling the Check_Int for the scanner code in my previous assignment, but turned it into a method instead
+
 - Trying to complete a task that has the same name as another task in the array or linked list will say (Finished) on both of them, even if I wanted to only complete 1. This is fixed by rather copying the task to the stack, we used the index itself since the index will always be unique.
+
+- Using indexes as the completion status breaks the previous LinkedList code that previously checks if a task is in the stack when removing it. Using indexes mean that all tasks after the removed task has their index shifted to the left, which doesn't correspond with the index inside the stack. I just asked ChatGPT to fix this since I'm too tired to code.
