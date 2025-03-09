@@ -82,6 +82,7 @@ public class DailyTaskManager {
         System.out.println(red + "Unfinished tasks = " + Unfinished_Tasks + reset);
         System.out.println("================================");
 
+        // funi dialogue depending on how many tasks finished
         if (Finished_Tasks == 0) {
             System.out.println(red + "\"Man, what are you doing lazing around? You ain't even done anything... Work!\"" + reset);
         } else if (Finished_Tasks < 3) {
@@ -155,7 +156,7 @@ public class DailyTaskManager {
                 System.out.println(red + "Task not found." + reset);
 
             } else {
-                Update_Index = Update_Index - 1; // Indexes start from 0 but my code wants input of task number 1 - n, so it needs to be subtracted by 1
+                Update_Index = Update_Index - 1; // Indices start from 0 but my code wants input of task number 1 - n, so it needs to be subtracted by 1
                 
                 // Adds task's index to stack to mark it as complete if it isn't in the stack
                 if (Tasks_Array_Status.contains(Update_Index)){
@@ -171,6 +172,7 @@ public class DailyTaskManager {
 
     // Linked List Methods //
 
+    // Method for listing all tasks in the linked list and its completion status
     public static void LinkedList_Listing(LinkedList<String> Tasks_LL, Stack<Integer> Tasks_LL_Status) {
         int Finished_Tasks = 0;
         System.out.println("=============TASKS=============");
@@ -196,6 +198,7 @@ public class DailyTaskManager {
         System.out.println(red + "Unfinished tasks = " + Unfinished_Tasks + reset);
         System.out.println("================================");
 
+        // more funi dialogue 
         if (Tasks_LL.isEmpty()) {
             System.out.println(red + "\"Uhh... there ain't anything here. Wait, is that the flag of Lithuania?\"" + reset);
         }
@@ -210,6 +213,7 @@ public class DailyTaskManager {
         }
     }
 
+    // Method for adding a task into the linked list
     public static void LinkedList_Add(LinkedList<String> Tasks_LL) {
         System.out.print("Type task to add (0 to exit): ");
         scanner.nextLine(); // Removes newline from previous input
@@ -224,7 +228,8 @@ public class DailyTaskManager {
             System.out.println(yellow + "Successfully added task " + Update_Task + "!" + reset);
         }
     }
-    
+
+    // Method for removing a task using its index
     public static void LinkedList_Remove(LinkedList<String> Tasks_LL, Stack<Integer> Tasks_LL_Status) {
 
         while (true) {
@@ -246,7 +251,7 @@ public class DailyTaskManager {
                 System.out.println(red + "Task not found." + reset);
 
             } else {
-                Update_Index = Update_Index - 1; // Indexes start from 0 but my code wants input of task number 1 - n, so it needs to be subtracted by 1
+                Update_Index = Update_Index - 1; // Indices start from 0 but my code wants input of task number 1 - n, so it needs to be subtracted by 1
     
                 // Remove the task's index from the status stack if it exists
                 if (Tasks_LL_Status.contains(Update_Index)) {
@@ -269,7 +274,8 @@ public class DailyTaskManager {
             }
         } 
     }
-    
+
+    // Method for marking a task as complete or undoing a task
     public static void LinkedList_UpdateStatus(LinkedList<String> Tasks_LL, Stack<Integer> Tasks_LL_Status) {
 
         while (true) {
@@ -289,7 +295,7 @@ public class DailyTaskManager {
 
                 } else {
                     System.out.println(yellow + "Task " + Tasks_LL_Status.peek() + " has been undoed!" + reset);
-                    Tasks_LL_Status.pop();
+                    Tasks_LL_Status.pop(); // Removes newest task
                 }
             }
 
@@ -298,7 +304,7 @@ public class DailyTaskManager {
                 System.out.println(red + "Task not found." + reset);
 
             } else {
-                Update_Index = Update_Index - 1; // Indexes start from 0 but my code wants input of task number 1 - n, so it needs to be subtracted by 1
+                Update_Index = Update_Index - 1; // Indices start from 0 but my code wants input of task number 1 - n, so it needs to be subtracted by 1
 
                 // Adds task 's index to the stack to mark it as complete if it isn't in the stack
                 if (Tasks_LL_Status.contains(Update_Index)){
