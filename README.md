@@ -1,12 +1,23 @@
 ## Introduction
 
-Another assignment, another report. For this one, we basically have to create some sort of task manager (not to be confused with CMD) sort of like a to do list. We have to use arrays, stacks, and linked lists as data structures for the tasks.
+Another assignment, another report. For this one, we basically have to create some sort of task manager (not to be confused with CMD), sort of like a to do list. We have to use arrays, stacks, and linked lists as data structures for the tasks. Arrays and Linked Lists are where the tasks are stored, and stacks are where each task are marked as either unfinished or finished. 
 
 ## Environment Setup
 
 - JDK (Java Development Kit) Version 23.0.2 
 - Visual Studio Code as my IDE (Integrated Development Environment) because my laptop is a potato and can't handle any other ones.
 - Git as a way to push files to Github
+
+## My approach to each data structure
+
+**- Arrays**
+This is the simplest once. Since array sizes are fixed, we can just have a pre-determined list of n tasks that can be updated where each task can be updated whenever we want by just changing the values in n index. It gets a bit complicated though when stacks are involved, which are used for applying and reversing completion status.
+
+**-Stacks**
+Stacks are where we mark a task as complete. If a task is in the stack, it is finished. This is made easier by using Java's java.util.Stack import. At first, I tried storing the task's name itself in the stack, but it quickly backfired by applying a finished status to all tasks with that name (including duplicate tasks), rather than one specific task. I changed this by storing the task's index since all indexes are unique.
+
+**-Linked List**
+Linked List wasn't all that hard either since all I did was copy the code for the methods in Arrays and change the variables a bit and added a remove feature + extra error handling.
 
 ## Challenges
 
