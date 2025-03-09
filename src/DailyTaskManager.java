@@ -5,14 +5,18 @@ import java.util.LinkedList; // Better than manually using LinkedList methods :/
 
 public class DailyTaskManager {
 
+/* Code References
+ * https://stackoverflow.com/questions/10241217/how-to-clear-console-in-java
+ * https://stackoverflow.com/questions/16816250/java-inputmismatchexception
+ * https://www.lihaoyi.com/post/BuildyourownCommandLinewithANSIescapecodes.html
+ */
+
 /*-------------------------------------------------------------------------------------------------------------------------------------*/
 
     // ==================== Universal Variable Area :O ==================== //
 
     // The collection of ANSI color codes for coloring text
-    static String reset = "\u001b[0m", red = "\u001b[31m", blue = "\u001b[34m", purple = "\u001b[35m";
-    static String cyan = "\u001b[36m", white = "\u001b[37m", yellow = "\u001b[33m", green = "\u001b[32m";
-    static String white_bold = "\u001b[37;1m", yellow_bold = "\u001b[33;1m", cyan_bold = "\u001b[36;1m";
+    static String reset = "\u001b[0m", red = "\u001b[31m", yellow = "\u001b[33m", green = "\u001b[32m";
 
     // Data structures for the program
     String[] Tasks_Arr = {"Eat", "Sleep", "Play", "Sleep part 2", "Sleep part 3"}; // Already predefined array
@@ -33,8 +37,7 @@ public class DailyTaskManager {
         while (true) {
             try {
                 return scanner.nextInt();
-            }
-            catch (InputMismatchException e) { 
+            } catch (InputMismatchException e) { 
                 System.out.print(red + "You either typed something non Integer or an integer too humongous. Try again : " + reset);
                 scanner.next();
             }
@@ -46,10 +49,12 @@ public class DailyTaskManager {
         try {
             if (System.getProperty("os.name").contains("Windows")) {
                 new ProcessBuilder("cmd", "/c", "cls").inheritIO().start().waitFor();
+
             } else {
                 System.out.print("\033[H\033[2J");
                 System.out.flush();
             }
+
         } catch (Exception e) {
             System.out.println("Could not clear console.");
         }
@@ -63,11 +68,9 @@ public class DailyTaskManager {
             // If a task's index (index for short is its ID number to keep them unique from other tasks) is in the stack, it's marked as complete
             if (Tasks_Array_Status.contains(i)) {
                 System.out.print(green + " (Finished)\n" + reset);
-            }
 
-            else {
+            } else {
                 System.out.print(red + " (Unfinished)\n" + reset);
-
             }
         }
     }
@@ -87,7 +90,7 @@ public class DailyTaskManager {
                 break;
 
             } else {
-                Update_Index = Update_Index - 1;
+                Update_Index = Update_Index - 1; // Indexes start from 0 but my code wants input of task number 1 - n, so it needs to be subtracted by 1
                 System.out.print("Update with what task : ");
                 scanner.nextLine(); // Removes newline from previous input
                 String Update_Task = scanner.nextLine();
@@ -115,9 +118,8 @@ public class DailyTaskManager {
             if (Update_Index == 0) {
                 clearConsole();
                 break;
-            }
-            
-            else if (Update_Index == 9) {
+
+            } else if (Update_Index == 9) {
 
                 // Removes newest task's index from stack which effectively removes it completion status
                 if (Tasks_Array_Status.isEmpty()) {
@@ -134,10 +136,8 @@ public class DailyTaskManager {
             else if (Update_Index > Tasks_Arr.length || Update_Index < 0) {
                 System.out.println(red + "Task not found." + reset);
 
-            } 
-
-            else {
-                Update_Index = Update_Index - 1; // Arrays start with index 0
+            } else {
+                Update_Index = Update_Index - 1; // Indexes start from 0 but my code wants input of task number 1 - n, so it needs to be subtracted by 1
                 
                 // Adds task's index to stack to mark it as complete if it isn't in the stack
                 if (Tasks_Array_Status.contains(Update_Index)){
@@ -158,9 +158,8 @@ public class DailyTaskManager {
 
         if (Tasks_LL.isEmpty()) {
             System.out.println(yellow + "Nothing in the list yet." + reset);
-        } 
 
-        else {
+        } else {
             for (int Update_Index = 0; Update_Index < Tasks_LL.size(); Update_Index++) {
                 System.out.print((Update_Index + 1) + ". " + Tasks_LL.get(Update_Index));
 
@@ -182,9 +181,8 @@ public class DailyTaskManager {
 
         if (Update_Task.equals("0")) {
             clearConsole();
-        }
-                            
-        else {
+            
+        } else {
             Tasks_LL.add(Update_Task);
             clearConsole();
             System.out.println(yellow + "Successfully added task " + Update_Task + "!" + reset);
@@ -212,7 +210,7 @@ public class DailyTaskManager {
                 System.out.println(red + "Task not found." + reset);
 
             } else {
-                Update_Index = Update_Index - 1;
+                Update_Index = Update_Index - 1; // Indexes start from 0 but my code wants input of task number 1 - n, so it needs to be subtracted by 1
     
                 // Remove the task's index from the status stack if it exists
                 if (Tasks_LL_Status.contains(Update_Index)) {
@@ -246,10 +244,9 @@ public class DailyTaskManager {
             if (Update_Index == 0) {
                 clearConsole();
                 break;
-            }
             
             // Removes newest task's index from stack which effectively removes it completion status
-            else if (Update_Index == 9) {
+            } else if (Update_Index == 9) {
 
                 if (Tasks_LL_Status.isEmpty()) {
                     System.out.println(yellow + "No completed tasks found..." + reset);
@@ -264,16 +261,14 @@ public class DailyTaskManager {
             else if (Update_Index > Tasks_LL.size()|| Update_Index < 0) {
                 System.out.println(red + "Task not found." + reset);
 
-            } 
-
-            else {
+            } else {
                 Update_Index = Update_Index - 1; // Indexes start from 0 but my code wants input of task number 1 - n, so it needs to be subtracted by 1
 
                 // Adds task 's index to the stack to mark it as complete if it isn't in the stack
                 if (Tasks_LL_Status.contains(Update_Index)){
                     System.out.println(yellow + "Task already completed!" + reset);
-                } 
-                else {
+
+                } else {
                     clearConsole();
                     Tasks_LL_Status.push(Update_Index);
                     System.out.println(yellow + "Successfully added task " + Tasks_LL.get(Update_Index) + " as complete!" + reset);
@@ -367,7 +362,7 @@ What would you like to do today?
 
                     default:
                         clearConsole();
-                        System.out.println("Invalid choice");
+                        System.out.println(red + "Invalid choice!" + reset);
                 }
             }
         }
