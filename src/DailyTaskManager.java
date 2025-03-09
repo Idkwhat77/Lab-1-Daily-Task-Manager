@@ -31,8 +31,6 @@ public class DailyTaskManager {
 
     // ==================== Method area :O ==================== //
 
-    // Array Methods //
-
     // Checks if input is an integer (non decimal number) or not (now in method form)
     public static int checkInt() {
         while (true) {
@@ -61,9 +59,12 @@ public class DailyTaskManager {
         }
     }
 
+    // Array Methods //
+    
     // Method for listing all tasks in the array and its completion status
     public static void Array_List(String[] Tasks_Arr, Stack<Integer> Tasks_Array_Status) {
         int Finished_Tasks = 0;
+        System.out.println("=============TASKS=============");
         for (int i = 0; i < Tasks_Arr.length; i++) { 
             System.out.print((i+1) + ". " + Tasks_Arr[i]);
             
@@ -79,6 +80,17 @@ public class DailyTaskManager {
         int Unfinished_Tasks = Tasks_Arr.length - Finished_Tasks;
         System.out.println(green + "Finished tasks = " + Finished_Tasks + reset);
         System.out.println(red + "Unfinished tasks = " + Unfinished_Tasks + reset);
+        System.out.println("================================");
+
+        if (Finished_Tasks == 0) {
+            System.out.println(red + "\"Man, what are you doing lazing around? You ain't even done anything... Work!\"" + reset);
+        } else if (Finished_Tasks < 3) {
+            System.out.println(yellow + "\"You're getting there... even if it's barely anything...\"" + reset);
+        } else if (Finished_Tasks < 5) {
+            System.out.println(yellow + "\"Almost there... don't you dare stop or else...\"" + reset);
+        } else if (Finished_Tasks == 5) {
+            System.out.println(green + "\"Wow, you actually completed them all. You earned yourself an 8 hour sleep!\"" + reset);
+        }
     }
 
     // Method for updating a task in the array
@@ -150,7 +162,6 @@ public class DailyTaskManager {
                     System.out.println(yellow + "Task already completed!" + reset);
                 } 
                 else {
-                    clearConsole();
                     Tasks_Array_Status.push(Update_Index);
                     System.out.println(yellow + "Successfully updated task " + Tasks_Arr[Update_Index] + " as complete!" + reset);
                 }
@@ -162,6 +173,7 @@ public class DailyTaskManager {
 
     public static void LinkedList_Listing(LinkedList<String> Tasks_LL, Stack<Integer> Tasks_LL_Status) {
         int Finished_Tasks = 0;
+        System.out.println("=============TASKS=============");
         if (Tasks_LL.isEmpty()) {
             System.out.println(yellow + "Nothing in the list yet." + reset);
 
@@ -182,6 +194,20 @@ public class DailyTaskManager {
         int Unfinished_Tasks = Tasks_LL.size() - Finished_Tasks;
         System.out.println(green + "Finished tasks = " + Finished_Tasks + reset);
         System.out.println(red + "Unfinished tasks = " + Unfinished_Tasks + reset);
+        System.out.println("================================");
+
+        if (Tasks_LL.isEmpty()) {
+            System.out.println(red + "\"Uhh... there ain't anything here. Wait, is that the flag of Lithuania?\"" + reset);
+        }
+        else if (Finished_Tasks == 0 ) {
+            System.out.println(red + "\"Man, what are you doing lazing around? You ain't even done anything... Work!\"" + reset);
+        } else if (Finished_Tasks < 3) {
+            System.out.println(yellow + "\"You're getting there... even if it's barely anything...\"" + reset);
+        } else if (Finished_Tasks < 5) {
+            System.out.println(yellow + "\"Almost there... don't you dare stop or else...\"" + reset);
+        } else if (Finished_Tasks == 5) {
+            System.out.println(green + "\"Wow, you actually completed them all. You earned yourself an 8 hour sleep!\"" + reset);
+        }
     }
 
     public static void LinkedList_Add(LinkedList<String> Tasks_LL) {
@@ -279,7 +305,6 @@ public class DailyTaskManager {
                     System.out.println(yellow + "Task already completed!" + reset);
 
                 } else {
-                    clearConsole();
                     Tasks_LL_Status.push(Update_Index);
                     System.out.println(yellow + "Successfully added task " + Tasks_LL.get(Update_Index) + " as complete!" + reset);
                 }
