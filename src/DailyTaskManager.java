@@ -94,11 +94,11 @@ public class DailyTaskManager {
                 
                 // Removes the task's index if marked as complete in stack
                 if (Tasks_Array_Status.contains(Update_Index)) {
-                    Tasks_Array_Status.remove(Update_Index);
+                    Tasks_Array_Status.remove(Tasks_Array_Status.indexOf(Update_Index));
                 }
                 
                 Clear_Console();
-                System.out.println(yellow + "Succesfully updated task " + Tasks_Arr[Update_Index] + " with " + Update_Task + "!" + reset);
+                System.out.println(yellow + "Successfully updated task " + Tasks_Arr[Update_Index] + " with " + Update_Task + "!" + reset);
                 Tasks_Arr[Update_Index] = Update_Task;
                 break;
             }
@@ -146,7 +146,7 @@ public class DailyTaskManager {
                 else {
                     Clear_Console();
                     Tasks_Array_Status.push(Update_Index);
-                    System.out.println(yellow + "Succesfully updated task " + Tasks_Arr[Update_Index] + " as complete!" + reset);
+                    System.out.println(yellow + "Successfully updated task " + Tasks_Arr[Update_Index] + " as complete!" + reset);
                 }
             }
         }
@@ -187,7 +187,7 @@ public class DailyTaskManager {
         else {
             Tasks_LL.add(Update_Task);
             Clear_Console();
-            System.out.println(yellow + "Succesfully added task " + Update_Task + "!" + reset);
+            System.out.println(yellow + "Successfully added task " + Update_Task + "!" + reset);
         }
     }
     
@@ -195,41 +195,47 @@ public class DailyTaskManager {
 
         while (true) {
             System.out.print("Type task number to remove (0 to exit): ");
-            scanner.nextLine(); // Removes newline from previous input
-            int Update_Index = Check_Int(); // Gets integer user input from Check_Int method
-
+            scanner.nextLine(); // Clears the newline from previous input
+            int Update_Index = Check_Int(); // Gets integer user input
+    
             if (Update_Index == 0) {
                 Clear_Console();
                 break;
-            }
 
-            else if (Tasks_LL.isEmpty()){
+            } else if (Tasks_LL.isEmpty()){
                 Clear_Console();
                 System.out.println(yellow + "Nothing in the list yet." + reset);
                 break;
-            }
 
-            // Error handling for out of bound index
-            else if (Update_Index > Tasks_LL.size()) {
+            // Error handling for out of bounds index
+            } else if (Update_Index > Tasks_LL.size() || Update_Index < 0) {
                 System.out.println(red + "Task not found." + reset);
-            } 
-            
-            else {
-                Update_Index = Update_Index - 1; // Indexes start from 0 but my code wants input of task number 1 - n, so it needs to be subtracted by 1
 
-                // Removes the task's index if marked as complete in the stack
+            } else {
+                Update_Index = Update_Index - 1;
+    
+                // Remove the task's index from the status stack if it exists
                 if (Tasks_LL_Status.contains(Update_Index)) {
-                    Tasks_LL_Status.remove(Update_Index);
+                    Tasks_LL_Status.remove(Tasks_LL_Status.indexOf(Update_Index));
                 }
-
+    
                 Tasks_LL.remove(Update_Index);
+    
+                // Update all indices in Tasks_LL_Status that are greater than the removed index.
+                for (int i = 0; i < Tasks_LL_Status.size(); i++) {
+                    int currentIndex = Tasks_LL_Status.get(i);
+                    if (currentIndex > Update_Index) {
+                        Tasks_LL_Status.set(i, currentIndex - 1);
+                    }
+                }
+    
                 Clear_Console();
                 System.out.println(yellow + "Removed task!" + reset);
                 break;
             }
         } 
     }
-
+    
     public static void LinkedList_UpdateStatus(LinkedList<String> Tasks_LL, Stack<Integer> Tasks_LL_Status) {
 
         while (true) {
@@ -270,7 +276,7 @@ public class DailyTaskManager {
                 else {
                     Clear_Console();
                     Tasks_LL_Status.push(Update_Index);
-                    System.out.println(yellow + "Succesfully added task " + Tasks_LL.get(Update_Index) + " as complete!" + reset);
+                    System.out.println(yellow + "Successfully added task " + Tasks_LL.get(Update_Index) + " as complete!" + reset);
                 }
             }
         }
