@@ -9,7 +9,7 @@ public class DailyTaskManager {
 
     // ==================== Universal Variable Area :O ==================== //
 
-    // The collection of ANSI color codes to avoid copy pasting
+    // The collection of ANSI color codes for coloring text
     static String reset = "\u001b[0m", red = "\u001b[31m", blue = "\u001b[34m", purple = "\u001b[35m";
     static String cyan = "\u001b[36m", white = "\u001b[37m", yellow = "\u001b[33m", green = "\u001b[32m";
     static String white_bold = "\u001b[37;1m", yellow_bold = "\u001b[33;1m", cyan_bold = "\u001b[36;1m";
@@ -28,8 +28,8 @@ public class DailyTaskManager {
 
     // Array Methods //
 
-    // Checks if input is an integer or not (now in method form)
-    public static int Check_Int() {
+    // Checks if input is an integer (non decimal number) or not (now in method form)
+    public static int checkInt() {
         while (true) {
             try {
                 return scanner.nextInt();
@@ -41,8 +41,8 @@ public class DailyTaskManager {
         }
     }
 
-    // Clears console depending on if device os is Windows or not
-    public static void Clear_Console() {
+    // Clears console depending on if device OS is Windows or not
+    public static void clearConsole() {
         try {
             if (System.getProperty("os.name").contains("Windows")) {
                 new ProcessBuilder("cmd", "/c", "cls").inheritIO().start().waitFor();
@@ -60,7 +60,7 @@ public class DailyTaskManager {
         for (int i = 0; i < Tasks_Arr.length; i++) { 
             System.out.print((i+1) + ". " + Tasks_Arr[i]);
             
-            // Stack usage. If a task's index is in the stack, it's marked as complete
+            // If a task's index (index for short is its ID number to keep them unique from other tasks) is in the stack, it's marked as complete
             if (Tasks_Array_Status.contains(i)) {
                 System.out.print(green + " (Finished)\n" + reset);
             }
@@ -77,13 +77,13 @@ public class DailyTaskManager {
         while (true) {
             System.out.print("Which task would you like to update? (Type task number, 0 to exit) : ");
             scanner.nextLine(); // Removes newline from previous input
-            int Update_Index = Check_Int(); // Gets integer user input from Check_Int method
+            int Update_Index = checkInt(); // Gets integer user input from checkInt method
             
             if (Update_Index > Tasks_Arr.length || Update_Index < 0) {
                 System.out.println(red + "Task not found." + reset);
 
             } else if (Update_Index == 0) {
-                Clear_Console();
+                clearConsole();
                 break;
 
             } else {
@@ -97,7 +97,7 @@ public class DailyTaskManager {
                     Tasks_Array_Status.remove(Tasks_Array_Status.indexOf(Update_Index));
                 }
                 
-                Clear_Console();
+                clearConsole();
                 System.out.println(yellow + "Successfully updated task " + Tasks_Arr[Update_Index] + " with " + Update_Task + "!" + reset);
                 Tasks_Arr[Update_Index] = Update_Task;
                 break;
@@ -110,10 +110,10 @@ public class DailyTaskManager {
         while (true) {
             System.out.print("Which task would you like to mark as complete? (Type 0 to exit, 9 to undo): ");
             scanner.nextLine(); // Removes newline from previous input
-            int Update_Index = Check_Int(); // Gets integer user input from Check_Int method
+            int Update_Index = checkInt(); // Gets integer user input from checkInt method
 
             if (Update_Index == 0) {
-                Clear_Console();
+                clearConsole();
                 break;
             }
             
@@ -144,7 +144,7 @@ public class DailyTaskManager {
                     System.out.println(yellow + "Task already completed!" + reset);
                 } 
                 else {
-                    Clear_Console();
+                    clearConsole();
                     Tasks_Array_Status.push(Update_Index);
                     System.out.println(yellow + "Successfully updated task " + Tasks_Arr[Update_Index] + " as complete!" + reset);
                 }
@@ -181,12 +181,12 @@ public class DailyTaskManager {
         String Update_Task = scanner.nextLine();
 
         if (Update_Task.equals("0")) {
-            Clear_Console();
+            clearConsole();
         }
                             
         else {
             Tasks_LL.add(Update_Task);
-            Clear_Console();
+            clearConsole();
             System.out.println(yellow + "Successfully added task " + Update_Task + "!" + reset);
         }
     }
@@ -196,14 +196,14 @@ public class DailyTaskManager {
         while (true) {
             System.out.print("Type task number to remove (0 to exit): ");
             scanner.nextLine(); // Clears the newline from previous input
-            int Update_Index = Check_Int(); // Gets integer user input
+            int Update_Index = checkInt(); // Gets integer user input
     
             if (Update_Index == 0) {
-                Clear_Console();
+                clearConsole();
                 break;
 
             } else if (Tasks_LL.isEmpty()){
-                Clear_Console();
+                clearConsole();
                 System.out.println(yellow + "Nothing in the list yet." + reset);
                 break;
 
@@ -229,7 +229,7 @@ public class DailyTaskManager {
                     }
                 }
     
-                Clear_Console();
+                clearConsole();
                 System.out.println(yellow + "Removed task!" + reset);
                 break;
             }
@@ -241,10 +241,10 @@ public class DailyTaskManager {
         while (true) {
             System.out.print("Which task would you like to mark as complete? (Type 0 to exit, 9 to undo): ");
             scanner.nextLine(); // Removes newline from previous input
-            int Update_Index = Check_Int(); // Gets integer user input from Check_Int method
+            int Update_Index = checkInt(); // Gets integer user input from checkInt method
 
             if (Update_Index == 0) {
-                Clear_Console();
+                clearConsole();
                 break;
             }
             
@@ -256,7 +256,7 @@ public class DailyTaskManager {
 
                 } else {
                     System.out.println(yellow + "Task " + Tasks_LL_Status.peek() + " has been undoed!" + reset);
-                    Tasks_LL_Status.removeLast();
+                    Tasks_LL_Status.pop();
                 }
             }
 
@@ -274,7 +274,7 @@ public class DailyTaskManager {
                     System.out.println(yellow + "Task already completed!" + reset);
                 } 
                 else {
-                    Clear_Console();
+                    clearConsole();
                     Tasks_LL_Status.push(Update_Index);
                     System.out.println(yellow + "Successfully added task " + Tasks_LL.get(Update_Index) + " as complete!" + reset);
                 }
@@ -297,12 +297,12 @@ What would you like to do today?
 ================================
                         """);
                 System.out.print("Enter your choice: ");
-                int User_Choice = Check_Int(); 
+                int User_Choice = checkInt(); 
 
                 switch (User_Choice) {
 
                     case 1:
-                        Clear_Console();
+                        clearConsole();
                         Array_List(Tasks_Arr, Tasks_Array_Status);
                         break;
                                        
@@ -317,11 +317,11 @@ What would you like to do today?
                     // Go back to main menu
                     case 4:
                         scanner.nextLine();
-                        Clear_Console();
+                        clearConsole();
                         return;
                         
                     default:
-                        Clear_Console();
+                        clearConsole();
                         System.out.println(red + "Invalid choice!" + reset);
                 }
             }
@@ -341,11 +341,11 @@ What would you like to do today?
 ================================
                         """);
                 System.out.print("Enter your choice: ");
-                int User_Choice = Check_Int();
+                int User_Choice = checkInt();
                 switch (User_Choice) {
 
                     case 1:
-                        Clear_Console();
+                        clearConsole();
                         LinkedList_Listing(Tasks_LL, Tasks_LL_Status);
                         break;
                                        
@@ -362,11 +362,11 @@ What would you like to do today?
                         break;
 
                     case 5:
-                        Clear_Console();
+                        clearConsole();
                         return;
 
                     default:
-                        Clear_Console();
+                        clearConsole();
                         System.out.println("Invalid choice");
                 }
             }
@@ -378,7 +378,7 @@ What would you like to do today?
     public static void main(String[] args) throws Exception {
 
         DailyTaskManager TaskManager = new DailyTaskManager();
-        Clear_Console();
+        clearConsole();
         while (true) {
             System.out.print("""
 ==============================
@@ -388,19 +388,19 @@ Which menu do you want to see?
 2. Linked List
 ============================== 
 Please enter :  """);
-            int Menu_Choice = Check_Int();
+            int Menu_Choice = checkInt();
             if (Menu_Choice == 1) {
-                Clear_Console();
+                clearConsole();
                 TaskManager.Array_Menu();
             } else if (Menu_Choice == 2) {
-                Clear_Console();
+                clearConsole();
                 TaskManager.LinkedList_Menu();
             } else if (Menu_Choice == 0) {
                 scanner.close();
                 System.out.print(green + "Bye bye" + reset);
                 break;
             } else {
-                Clear_Console();
+                clearConsole();
                 System.out.println(red + "Not a valid option!" + reset);
             }
         }
