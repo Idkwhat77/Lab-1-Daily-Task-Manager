@@ -62,17 +62,22 @@ public class DailyTaskManager {
 
     // Method for listing all tasks in the array and its completion status
     public static void Array_List(String[] Tasks_Arr, Stack<Integer> Tasks_Array_Status) {
+        int Finished_Tasks = 0;
         for (int i = 0; i < Tasks_Arr.length; i++) { 
             System.out.print((i+1) + ". " + Tasks_Arr[i]);
             
             // If a task's index (index for short is its ID number to keep them unique from other tasks) is in the stack, it's marked as complete
             if (Tasks_Array_Status.contains(i)) {
                 System.out.print(green + " (Finished)\n" + reset);
+                Finished_Tasks = Finished_Tasks + 1;
 
             } else {
                 System.out.print(red + " (Unfinished)\n" + reset);
             }
         }
+        int Unfinished_Tasks = Tasks_Arr.length - Finished_Tasks;
+        System.out.println(green + "Finished tasks = " + Finished_Tasks + reset);
+        System.out.println(red + "Unfinished tasks = " + Unfinished_Tasks + reset);
     }
 
     // Method for updating a task in the array
@@ -155,7 +160,7 @@ public class DailyTaskManager {
     // Linked List Methods //
 
     public static void LinkedList_Listing(LinkedList<String> Tasks_LL, Stack<Integer> Tasks_LL_Status) {
-
+        int Finished_Tasks = 0;
         if (Tasks_LL.isEmpty()) {
             System.out.println(yellow + "Nothing in the list yet." + reset);
 
@@ -164,14 +169,18 @@ public class DailyTaskManager {
                 System.out.print((Update_Index + 1) + ". " + Tasks_LL.get(Update_Index));
 
                 // Stack usage. If a task's index is in the stack, it's marked as  complete
-                if (!Tasks_LL_Status.contains(Update_Index)) {
-                    System.out.println(red + " (Unfinished)" + reset);
+                if (Tasks_LL_Status.contains(Update_Index)) {
+                    System.out.println(green + " (Finished)" + reset);
+                    Finished_Tasks = Finished_Tasks + 1;
 
                 } else {
-                    System.out.println(green + " (Finished)" + reset);
+                    System.out.println(red + " (Unfinished)" + reset);
                 }
             }
         }
+        int Unfinished_Tasks = Tasks_LL.size() - Finished_Tasks;
+        System.out.println(green + "Finished tasks = " + Finished_Tasks + reset);
+        System.out.println(red + "Unfinished tasks = " + Unfinished_Tasks + reset);
     }
 
     public static void LinkedList_Add(LinkedList<String> Tasks_LL) {
