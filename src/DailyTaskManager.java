@@ -16,15 +16,17 @@ public class DailyTaskManager {
 
     // Data structures for the program
     String[] Tasks_Arr = {"Eat", "Sleep", "Play", "Sleep part 2", "Sleep part 3"}; // Already predefined array
-    Stack<String> Tasks_Array_Status = new Stack<>();
+    Stack<Integer> Tasks_Array_Status = new Stack<>();
     LinkedList<String> Tasks_LL = new LinkedList<>();
-    Stack<String> Tasks_LL_Status = new Stack<>();
+    Stack<Integer> Tasks_LL_Status = new Stack<>();
 
     static Scanner scanner = new Scanner(System.in);
 
 /*-------------------------------------------------------------------------------------------------------------------------------------*/
 
-    // ==================== Main Program Area :O ==================== //
+    // ==================== Method area :O ==================== //
+
+    // Array Methods //
 
     // Checks if input is an integer or not (now in method form)
     public static int Check_Int() {
@@ -40,7 +42,7 @@ public class DailyTaskManager {
     }
 
     // Clears console depending on if device os is Windows or not
-    public static void clearConsole() {
+    public static void Clear_Console() {
         try {
             if (System.getProperty("os.name").contains("Windows")) {
                 new ProcessBuilder("cmd", "/c", "cls").inheritIO().start().waitFor();
@@ -53,7 +55,231 @@ public class DailyTaskManager {
         }
     }
 
+    // Method for listing all tasks in the array and its completion status
+    public static void Array_List(String[] Tasks_Arr, Stack<Integer> Tasks_Array_Status) {
+        for (int i = 0; i < Tasks_Arr.length; i++) { 
+            System.out.print((i+1) + ". " + Tasks_Arr[i]);
+            
+            // Stack usage. If a task's index is in the stack, it's marked as complete
+            if (Tasks_Array_Status.contains(i)) {
+                System.out.print(green + " (Finished)\n" + reset);
+            }
+
+            else {
+                System.out.print(red + " (Unfinished)\n" + reset);
+
+            }
+        }
+    }
+
+    // Method for updating a task in the array
+    public static void Array_Update(String[] Tasks_Arr, Stack<Integer> Tasks_Array_Status) {
+        while (true) {
+            System.out.print("Which task would you like to update? (Type task number, 0 to exit) : ");
+            scanner.nextLine(); // Removes newline from previous input
+            int Update_Index = Check_Int(); // Gets integer user input from Check_Int method
+            
+            if (Update_Index > Tasks_Arr.length || Update_Index < 0) {
+                System.out.println(red + "Task not found." + reset);
+
+            } else if (Update_Index == 0) {
+                Clear_Console();
+                break;
+
+            } else {
+                Update_Index = Update_Index - 1;
+                System.out.print("Update with what task : ");
+                scanner.nextLine(); // Removes newline from previous input
+                String Update_Task = scanner.nextLine();
+                
+                // Removes the task's index if marked as complete in stack
+                if (Tasks_Array_Status.contains(Update_Index)) {
+                    Tasks_Array_Status.remove(Update_Index);
+                }
+                
+                Clear_Console();
+                System.out.println(yellow + "Succesfully updated task " + Tasks_Arr[Update_Index] + " with " + Update_Task + "!" + reset);
+                Tasks_Arr[Update_Index] = Update_Task;
+                break;
+            }
+        }       
+    }
+
+    // Method for marking a task as complete or undoing a task
+    public static void Array_StatusUpdate(String[] Tasks_Arr, Stack<Integer> Tasks_Array_Status) {
+        while (true) {
+            System.out.print("Which task would you like to mark as complete? (Type 0 to exit, 9 to undo): ");
+            scanner.nextLine(); // Removes newline from previous input
+            int Update_Index = Check_Int(); // Gets integer user input from Check_Int method
+
+            if (Update_Index == 0) {
+                Clear_Console();
+                break;
+            }
+            
+            else if (Update_Index == 9) {
+
+                // Removes newest task's index from stack which effectively removes it completion status
+                if (Tasks_Array_Status.isEmpty()) {
+                    System.out.println(yellow + "No completed tasks found..." + reset);
+
+                } else {
+                    System.out.println(yellow + "Task " + Tasks_Array_Status.peek() + " has been undoed!" + reset);
+                    Tasks_Array_Status.pop(); 
+                }
+
+            }
+
+            // Error handling for out of bound index
+            else if (Update_Index > Tasks_Arr.length || Update_Index < 0) {
+                System.out.println(red + "Task not found." + reset);
+
+            } 
+
+            else {
+                Update_Index = Update_Index - 1; // Arrays start with index 0
+                
+                // Adds task's index to stack to mark it as complete if it isn't in the stack
+                if (Tasks_Array_Status.contains(Update_Index)){
+                    System.out.println(yellow + "Task already completed!" + reset);
+                } 
+                else {
+                    Clear_Console();
+                    Tasks_Array_Status.push(Update_Index);
+                    System.out.println(yellow + "Succesfully updated task " + Tasks_Arr[Update_Index] + " as complete!" + reset);
+                }
+            }
+        }
+    }
+
+    // Linked List Methods //
+
+    public static void LinkedList_Listing(LinkedList<String> Tasks_LL, Stack<Integer> Tasks_LL_Status) {
+
+        if (Tasks_LL.isEmpty()) {
+            System.out.println(yellow + "Nothing in the list yet." + reset);
+        } 
+
+        else {
+            for (int Update_Index = 0; Update_Index < Tasks_LL.size(); Update_Index++) {
+                System.out.print((Update_Index + 1) + ". " + Tasks_LL.get(Update_Index));
+
+                // Stack usage. If a task's index is in the stack, it's marked as  complete
+                if (!Tasks_LL_Status.contains(Update_Index)) {
+                    System.out.println(red + " (Unfinished)" + reset);
+
+                } else {
+                    System.out.println(green + " (Finished)" + reset);
+                }
+            }
+        }
+    }
+
+    public static void LinkedList_Add(LinkedList<String> Tasks_LL) {
+        System.out.print("Type task to add (0 to exit): ");
+        scanner.nextLine(); // Removes newline from previous input
+        String Update_Task = scanner.nextLine();
+
+        if (Update_Task.equals("0")) {
+            Clear_Console();
+        }
+                            
+        else {
+            Tasks_LL.add(Update_Task);
+            Clear_Console();
+            System.out.println(yellow + "Succesfully added task " + Update_Task + "!" + reset);
+        }
+    }
+    
+    public static void LinkedList_Remove(LinkedList<String> Tasks_LL, Stack<Integer> Tasks_LL_Status) {
+
+        while (true) {
+            System.out.print("Type task number to remove (0 to exit): ");
+            scanner.nextLine(); // Removes newline from previous input
+            int Update_Index = Check_Int(); // Gets integer user input from Check_Int method
+
+            if (Update_Index == 0) {
+                Clear_Console();
+                break;
+            }
+
+            else if (Tasks_LL.isEmpty()){
+                Clear_Console();
+                System.out.println(yellow + "Nothing in the list yet." + reset);
+                break;
+            }
+
+            // Error handling for out of bound index
+            else if (Update_Index > Tasks_LL.size()) {
+                System.out.println(red + "Task not found." + reset);
+            } 
+            
+            else {
+                Update_Index = Update_Index - 1; // Indexes start from 0 but my code wants input of task number 1 - n, so it needs to be subtracted by 1
+
+                // Removes the task's index if marked as complete in the stack
+                if (Tasks_LL_Status.contains(Update_Index)) {
+                    Tasks_LL_Status.remove(Update_Index);
+                }
+
+                Tasks_LL.remove(Update_Index);
+                Clear_Console();
+                System.out.println(yellow + "Removed task!" + reset);
+                break;
+            }
+        } 
+    }
+
+    public static void LinkedList_UpdateStatus(LinkedList<String> Tasks_LL, Stack<Integer> Tasks_LL_Status) {
+
+        while (true) {
+            System.out.print("Which task would you like to mark as complete? (Type 0 to exit, 9 to undo): ");
+            scanner.nextLine(); // Removes newline from previous input
+            int Update_Index = Check_Int(); // Gets integer user input from Check_Int method
+
+            if (Update_Index == 0) {
+                Clear_Console();
+                break;
+            }
+            
+            // Removes newest task's index from stack which effectively removes it completion status
+            else if (Update_Index == 9) {
+
+                if (Tasks_LL_Status.isEmpty()) {
+                    System.out.println(yellow + "No completed tasks found..." + reset);
+
+                } else {
+                    System.out.println(yellow + "Task " + Tasks_LL_Status.peek() + " has been undoed!" + reset);
+                    Tasks_LL_Status.removeLast();
+                }
+            }
+
+            // Error handling for out of bound index
+            else if (Update_Index > Tasks_LL.size()|| Update_Index < 0) {
+                System.out.println(red + "Task not found." + reset);
+
+            } 
+
+            else {
+                Update_Index = Update_Index - 1; // Indexes start from 0 but my code wants input of task number 1 - n, so it needs to be subtracted by 1
+
+                // Adds task 's index to the stack to mark it as complete if it isn't in the stack
+                if (Tasks_LL_Status.contains(Update_Index)){
+                    System.out.println(yellow + "Task already completed!" + reset);
+                } 
+                else {
+                    Clear_Console();
+                    Tasks_LL_Status.push(Update_Index);
+                    System.out.println(yellow + "Succesfully added task " + Tasks_LL.get(Update_Index) + " as complete!" + reset);
+                }
+            }
+        }
+    }
+
+    // Menu Methods //
+
     public void Array_Menu() {
+
         while (true) {
         System.out.println("""
 ================================
@@ -70,107 +296,33 @@ What would you like to do today?
                 switch (User_Choice) {
 
                     case 1:
-                        clearConsole();
-
-                        for (int Update_Index = 0; Update_Index < Tasks_Arr.length; Update_Index++) { 
-                            System.out.print((Update_Index+1) + ". " + Tasks_Arr[Update_Index]);
-                            
-                            if (Tasks_Array_Status.contains(Tasks_Arr[Update_Index])) {
-                                System.out.print(green + " (Finished)\n" + reset);
-                            }
-
-                            else {
-                                System.out.print(red + " (Unfinished)\n" + reset);
-
-                            }
-                        }
+                        Clear_Console();
+                        Array_List(Tasks_Arr, Tasks_Array_Status);
                         break;
                                        
                     case 2:
-
-                        // Uses task number n, not task index that starts from 0
-                        while (true) {
-                            System.out.print("Which task would you like to update? (Type task number, 0 to exit) : ");
-                            int Update_Index = Check_Int();
-                            
-                            if (Update_Index > Tasks_Arr.length || Update_Index < 0) {
-                                System.out.println(red + "Task not found." + reset);
-
-                            } else if (Update_Index == 0) {
-                                clearConsole();
-                                break;
-
-                            } else {
-                                Update_Index = Update_Index - 1;
-                                System.out.print("Update with what task : ");
-                                scanner.nextLine();
-                                String Update_Task = scanner.nextLine();
-                                Tasks_Arr[Update_Index] = Update_Task;
-                                clearConsole();
-                                System.out.println(yellow + "Succesfully updated!" + reset);
-                                break;
-                            }
-                        }
+                        Array_Update(Tasks_Arr, Tasks_Array_Status);
                         break;
 
                     case 3:
-                        while (true) {
-                            System.out.print("Which task would you like to mark as complete? (Type 0 to exit, 9 to undo): ");
-                            int Update_Index = Check_Int();
-
-                            if (Update_Index == 0) {
-                                clearConsole();
-                                break;
-                            }
-                            
-                            else if (Update_Index == 9) {
-
-                                if (Tasks_Array_Status.isEmpty()) {
-                                    System.out.println("No completed tasks found...");
-
-                                } else {
-                                    Tasks_Array_Status.pop(); // Remove the very last element of the stack
-                                    System.out.println("Task has been untasked!");
-                                }
-
-                            }
-
-                            // Error handling for out of bound index
-                            else if (Update_Index > Tasks_Arr.length || Update_Index < 0) {
-                                System.out.println(red + "Task not found." + reset);
-
-                            } 
-
-                            else {
-                                Update_Index = Update_Index - 1;
-                                String Epic_Task = Tasks_Arr[Update_Index];
-                                
-                                if (Tasks_Array_Status.contains(Tasks_Arr[Update_Index])){
-                                    System.out.println("Task already completed!");
-                                } 
-                                else {
-                                    clearConsole();
-                                    Tasks_Array_Status.push(Tasks_Arr[Update_Index]);
-                                    System.out.println(yellow + "Succesfully updated!" + reset);
-                                }
-                            }
-                        }
+                        Array_StatusUpdate(Tasks_Arr, Tasks_Array_Status);
                         break;
 
                     // Go back to main menu
                     case 4:
                         scanner.nextLine();
-                        clearConsole();
+                        Clear_Console();
                         return;
                         
                     default:
-                        clearConsole();
+                        Clear_Console();
                         System.out.println(red + "Invalid choice!" + reset);
                 }
             }
         }
     
-public void LinkedList_Menu() {
+    public void LinkedList_Menu() {
+
         while (true) {
         System.out.println("""
 ================================
@@ -187,132 +339,40 @@ What would you like to do today?
                 switch (User_Choice) {
 
                     case 1:
-                        clearConsole();
-
-                        if (Tasks_LL.isEmpty()) {
-                            System.out.println(yellow + "Nothing in the list yet." + reset);
-                        } 
-
-                        else {
-
-                            for (int Update_Index = 0; Update_Index < Tasks_LL.size(); Update_Index++) {
-                                System.out.print((Update_Index + 1) + ". " + Tasks_LL.get(Update_Index));
-
-                                if (!Tasks_LL_Status.contains(Tasks_LL.get(Update_Index))) {
-                                    System.out.println(red + " (Unfinished)" + reset);
-
-                                } else {
-                                    System.out.println(green + " (Finished)" + reset);
-                                }
-                            }
-                        }
+                        Clear_Console();
+                        LinkedList_Listing(Tasks_LL, Tasks_LL_Status);
                         break;
                                        
                     case 2:
-                        System.out.print("Type task to add (0 to exit): ");
-                        scanner.nextLine();
-                        String Update_Task = scanner.nextLine();
-
-                        if (Update_Task.equals("0")) {
-                            clearConsole();
-                            break;
-                        }
-                        
-                        else {
-                            Tasks_LL.add(Update_Task);
-                            clearConsole();
-                            System.out.println(yellow + "Succesfully updated!" + reset);
-                            break;
-                        }
+                        LinkedList_Add(Tasks_LL);
+                        break;
 
                     case 3:
-                    
-                        while (true) {
-                            System.out.print("Type task number to remove (0 to exit): ");
-                            int Update_Index = Check_Int();
-
-                            if (Update_Index == 0) {
-                                clearConsole();
-                                break;
-                            }
-
-                            else if (Tasks_LL.isEmpty()){
-                                clearConsole();
-                                System.out.println(yellow + "Nothing in the list yet." + reset);
-                                break;
-                            }
-
-                            else if (Update_Index > Tasks_LL.size()) {
-                                System.out.println(red + "Task not found." + reset);
-                            } 
-                            
-                            else {
-                                Update_Index = Update_Index - 1;
-                                Tasks_LL.remove(Update_Index);
-                                clearConsole();
-                                System.out.println("Yay");
-                                break;
-                            }
-                        } 
+                        LinkedList_Remove(Tasks_LL, Tasks_LL_Status);
                         break;
 
                     case 4:
-
-                        while (true) {
-                            System.out.print("Which task would you like to mark as complete? (Type 0 to exit, 9 to undo): ");
-                            int Update_Index = Check_Int();
-
-                            if (Update_Index == 0) {
-                                clearConsole();
-                                break;
-                            }
-                            
-                            else if (Update_Index == 9) {
-
-                                if (Tasks_LL_Status.isEmpty()) {
-                                    System.out.println("No completed tasks found...");
-
-                                } else {
-                                    Tasks_LL_Status.remove(Tasks_LL.removeLast());
-                                    System.out.println("Task has been untasked!");
-                                }
-
-                            }
-
-                            else if (Update_Index > Tasks_LL.size()|| Update_Index < 0) {
-                                System.out.println(red + "Task not found." + reset);
-
-                            } 
-
-                            else {
-                                Update_Index = Update_Index - 1;
-
-                                if (Tasks_LL_Status.contains(Tasks_LL.get(Update_Index))){
-                                    System.out.println("Task already completed!");
-                                } 
-                                else {
-                                    clearConsole();
-                                    Tasks_LL_Status.add(Tasks_LL.get(Update_Index));
-                                    System.out.println(yellow + "Succesfully updated!" + reset);
-                                }
-                            }
-                        }
+                        LinkedList_UpdateStatus(Tasks_LL, Tasks_LL_Status);
                         break;
 
                     case 5:
-                        clearConsole();
+                        Clear_Console();
                         return;
 
                     default:
-                        clearConsole();
+                        Clear_Console();
                         System.out.println("Invalid choice");
                 }
             }
         }
 
+/*-------------------------------------------------------------------------------------------------------------------------------------*/
+
+    // ==================== Main Program Area :O ==================== //
     public static void main(String[] args) throws Exception {
 
         DailyTaskManager TaskManager = new DailyTaskManager();
+        Clear_Console();
         while (true) {
             System.out.print("""
 ==============================
@@ -324,16 +384,17 @@ Which menu do you want to see?
 Please enter :  """);
             int Menu_Choice = Check_Int();
             if (Menu_Choice == 1) {
-                clearConsole();
+                Clear_Console();
                 TaskManager.Array_Menu();
             } else if (Menu_Choice == 2) {
-                clearConsole();
+                Clear_Console();
                 TaskManager.LinkedList_Menu();
             } else if (Menu_Choice == 0) {
-                System.out.print("Bye bye");
+                scanner.close();
+                System.out.print(green + "Bye bye" + reset);
                 break;
             } else {
-                clearConsole();
+                Clear_Console();
                 System.out.println(red + "Not a valid option!" + reset);
             }
         }
